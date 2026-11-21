@@ -8,6 +8,10 @@ on:
       - master
       - 'arena/**'
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -24,7 +28,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
-        run: chmod +x gradlew && ./gradlew build --no-daemon
+        run: |
+          chmod +x gradlew
+          set -o pipefail
+          ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
 
       - name: Show produced jars
         if: always()
@@ -36,3 +43,33 @@ jobs:
           name: createnetworks-jar
           path: build/libs/*.jar
           if-no-files-found: error
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+          if-no-files-found: ignore
+
+      - name: Report build log to issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SHA: ${{ github.sha }}
+        run: |
+          log_file=build.log
+          [ -f "$log_file" ] || log_file=/dev/null
+          {
+            echo "Auto-captured build log for $RUN_URL (commit $SHA)."
+            echo ""
+            echo '```'
+            tail -c 55000 "$log_file"
+            echo '```'
+          } > /tmp/body.md
+          gh issue create \
+            --title "CI build log ($SHA)" \
+            --body-file /tmp/body.md \
+            --label "" 2>/dev/null || \
+          gh issue create --title "CI build log ($SHA)" --body-file /tmp/body.md
