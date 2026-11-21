@@ -20,7 +20,7 @@ public final class RadioPropagation {
         double distance = Math.max(1.0, Math.sqrt(transmitter.distSqr(receiver)));
 
         // Free-space path loss approximation scaled for Minecraft blocks
-        double fspl = 20.0 * Math.log10(distance) + 20.0 * Math.log10(frequencyGhz) + 24.0;
+        double fspl = SignalMath.freeSpacePathLossDb(distance, frequencyGhz);
 
         // Raymarch obstacles between transmitter and receiver
         double obstacleLoss = 0.0;
@@ -68,10 +68,6 @@ public final class RadioPropagation {
      * Converts dBm to 0-4 signal bars.
      */
     public static int rssiToBars(double rssiDbm) {
-        if (rssiDbm >= -65) return 4;
-        if (rssiDbm >= -80) return 3;
-        if (rssiDbm >= -95) return 2;
-        if (rssiDbm >= -110) return 1;
-        return 0;
+        return SignalMath.rssiToBars(rssiDbm);
     }
 }

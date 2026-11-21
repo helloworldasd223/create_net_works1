@@ -30,11 +30,20 @@ public class NetworkEngineTest {
     }
 
     @Test
+    public void testFreeSpacePathLoss() {
+        // Doubling the distance adds ~6 dB of free-space loss
+        double near = SignalMath.freeSpacePathLossDb(10, 3.5);
+        double far = SignalMath.freeSpacePathLossDb(20, 3.5);
+        assertEquals(6.02, far - near, 0.1);
+        assertTrue(SignalMath.receivedPowerDbm(43.0, 100, 3.5, 0) < 0);
+    }
+
+    @Test
     public void testRadioSignalBars() {
-        assertEquals(4, RadioPropagation.rssiToBars(-55.0));
-        assertEquals(3, RadioPropagation.rssiToBars(-75.0));
-        assertEquals(2, RadioPropagation.rssiToBars(-90.0));
-        assertEquals(1, RadioPropagation.rssiToBars(-105.0));
-        assertEquals(0, RadioPropagation.rssiToBars(-120.0));
+        assertEquals(4, SignalMath.rssiToBars(-55.0));
+        assertEquals(3, SignalMath.rssiToBars(-75.0));
+        assertEquals(2, SignalMath.rssiToBars(-90.0));
+        assertEquals(1, SignalMath.rssiToBars(-105.0));
+        assertEquals(0, SignalMath.rssiToBars(-120.0));
     }
 }
