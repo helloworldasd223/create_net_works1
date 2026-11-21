@@ -1,0 +1,11 @@
+Промпт для нового чата Arena (с подключенным GitHub):
+
+Подключи GitHub и сделай следующее:
+1. Распакуй архив CreateNetWorks.txt (переименуй в .zip и распакуй) — это мод Create: NetWorks для Minecraft 1.21.1 NeoForge.
+2. Создай новый публичный репозиторий CreateNetWorks и запушь туда весь проект.
+3. Запусти GitHub Action Build Mod и дождись сборки.
+4. Скачай готовый .jar из Artifacts (build/libs/createnetworks-neoforge-1.21.1-1.0.0.jar) и отдай мне.
+
+Инструкция для тебя:
+- Сожми папку F:\CreateNetWorks в CreateNetWorks.zip (ПКМ -> Отправить -> Сжатая папка), затем переименуй в CreateNetWorks.txt и загрузи в новый чат Arena.
+- В новом чате включи коннектор GitHub (значок GitHub -> Connect) перед отправкой промпта.
