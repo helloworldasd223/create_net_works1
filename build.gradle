@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.107'
 }
 
@@ -58,8 +57,10 @@ dependencies {
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    // Optional compile/runtime integration with Create: Power Grid
-    compileOnly("curse.maven:power-grid-1321420:8646886")
+    // Optional compile-time integration with Create: Power Grid.
+    // Only soft-linked: detection is done at runtime via ModList, so the mod builds
+    // without the third-party jar and no hard dependency is declared.
+    // compileOnly("curse.maven:power-grid-1321420:8646886")
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -71,4 +72,23 @@ tasks.withType(Test).configureEach {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+// Expand ${...} placeholders in mod metadata files.
+tasks.withType(ProcessResources).configureEach {
+    def expandProps = [
+            mod_id           : project.mod_id,
+            mod_name         : project.mod_name,
+            mod_version      : project.mod_version,
+            mod_group_id     : project.mod_group_id,
+            mod_authors      : project.mod_authors,
+            mod_description  : project.mod_description,
+            minecraft_version: project.minecraft_version,
+            neo_version      : project.neo_version
+    ]
+
+    inputs.properties(expandProps)
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+        expand(expandProps)
+    }
 }
