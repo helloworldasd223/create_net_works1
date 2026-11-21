@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "createnetworks:phone_chassis"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": {
+        "id": "createnetworks:smartphone"
+      }
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createnetworks:phone_chassis" },
+        { "item": "createnetworks:printed_circuit_board" }
+      ],
+      "results": [{ "item": { "id": "createnetworks:phone_chassis" } }]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createnetworks:phone_chassis" },
+        { "item": "createnetworks:soc_processor" }
+      ],
+      "results": [{ "item": { "id": "createnetworks:phone_chassis" } }]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createnetworks:phone_chassis" },
+        { "item": "createnetworks:modem_5g_chip" }
+      ],
+      "results": [{ "item": { "id": "createnetworks:phone_chassis" } }]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createnetworks:phone_chassis" },
+        { "item": "createnetworks:lithium_battery" }
+      ],
+      "results": [{ "item": { "id": "createnetworks:phone_chassis" } }]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createnetworks:phone_chassis" },
+        { "item": "createnetworks:oled_display" }
+      ],
+      "results": [{ "item": { "id": "createnetworks:phone_chassis" } }]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        { "item": "createnetworks:phone_chassis" }
+      ],
+      "results": [{ "item": { "id": "createnetworks:phone_chassis" } }]
+    }
+  ],
+  "transitional_item": {
+    "id": "createnetworks:phone_chassis"
+  }
+}
