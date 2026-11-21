@@ -3,7 +3,10 @@ name: Build Mod
 on:
   workflow_dispatch:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
+      - master
+      - 'arena/**'
 
 jobs:
   build:
@@ -23,8 +26,13 @@ jobs:
       - name: Build with Gradle
         run: chmod +x gradlew && ./gradlew build --no-daemon
 
+      - name: Show produced jars
+        if: always()
+        run: ls -la build/libs || true
+
       - name: Upload mod jar
         uses: actions/upload-artifact@v4
         with:
           name: createnetworks-jar
           path: build/libs/*.jar
+          if-no-files-found: error
