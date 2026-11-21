@@ -25,3 +25,6 @@ run-data/
 
 # Logs
 *.log
+
+# Published build output
+# dist/ is committed by CI (see build.yml) to expose the jar without artifact download

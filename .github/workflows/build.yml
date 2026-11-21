@@ -9,7 +9,7 @@ on:
       - 'arena/**'
 
 permissions:
-  contents: read
+  contents: write
   issues: write
 
 jobs:
@@ -43,6 +43,21 @@ jobs:
           name: createnetworks-jar
           path: build/libs/*.jar
           if-no-files-found: error
+
+      - name: Publish jar into repository (dist/)
+        if: success()
+        run: |
+          mkdir -p dist
+          cp build/libs/*.jar dist/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist
+          if git diff --cached --quiet; then
+            echo "dist/ already up to date"
+            exit 0
+          fi
+          git commit -m "Publish built mod jar [skip ci]"
+          git push
 
       - name: Upload build log
         if: always()
